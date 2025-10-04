@@ -1,9 +1,9 @@
 <template>
-  <TrainView />
-  <PredictView />
+  <TrainSection />
+  <PredictSection />
 </template>
 
 <script setup lang="ts">
-import PredictView from './sections/PredictSection.vue'
-import TrainView from './sections/TrainSection.vue'
+import TrainSection from './sections/TrainSection.vue'
+import PredictSection from './sections/PredictSection.vue'
 </script>
