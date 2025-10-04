@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-row items-center justify-between px-32 py-2 border-b-2 border-gray-300">
+  <div class="flex flex-row items-center justify-between px-16 py-2 border-b-2 border-gray-300">
     <!-- Train -->
     <div class="flex flex-col gap-y-2">
       <h1 class="text-2xl font-semibold">Train</h1>
-      <Button severity="info" rounded>
+      <Button class="custom-blue-button" rounded>
         <i class="pi pi-play py-2" style="font-size: 1.2rem; font-weight: bold" />
       </Button>
     </div>
@@ -47,3 +47,11 @@ import { ref } from 'vue';
 const datasets = ref(['KOI', 'TESS'])
 const algorithms = ref(['Backpropagation', 'Algorithm'])
 </script>
+
+<style scoped>
+.custom-blue-button {
+  /* electrical-blue, in the color palette */
+  background-color: #0042a6;
+  border-color: #0042a6;
+}
+</style>
