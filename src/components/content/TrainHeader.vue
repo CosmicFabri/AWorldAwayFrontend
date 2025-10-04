@@ -54,4 +54,10 @@ const algorithms = ref(['Backpropagation', 'Algorithm'])
   background-color: #0042a6;
   border-color: #0042a6;
 }
+
+.custom-blue-button:hover {
+  /* electrical-blue, in the color palette */
+  background-color: #2867c7 !important;
+  border-color: #2867c7 !important;
+}
 </style>
