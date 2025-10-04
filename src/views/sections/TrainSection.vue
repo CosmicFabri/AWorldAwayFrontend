@@ -1,6 +1,6 @@
 <template>
   <TrainHeader />
-  <div class="flex flex-col w-2/3 h-1/4 px-32 py-4">
+  <div class="flex flex-col w-2/3 h-1/4 px-16 py-4">
     <!-- Table and graphs -->
     <DataTable
       size="small"

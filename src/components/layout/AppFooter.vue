@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-4 bg-sky-200 border-t-2 border-sky-500">
-    <p class="mx-auto">&copy; 2025 Delta Software, all rights reserved.</p>
+  <div class="flex p-4 bg-electrical-blue text-white">
+    <p class="mx-auto">&copy; 2025 Delta. All rights reserved.</p>
   </div>
 </template>

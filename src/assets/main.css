@@ -1,2 +1,10 @@
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
+
+@theme {
+  --color-blue-yonder: #4a90e2;
+  --color-deep-blue: #07173f;
+  --color-electrical-blue: #0042a6;
+  --color-martian-red: #8e1100;
+}
+
