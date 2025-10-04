@@ -1,5 +1,8 @@
 <template>
-  <div></div>
+  <TrainHeader />
+  <div class="flex p-4">Train content</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TrainHeader from '@/components/content/TrainHeader.vue'
+</script>
