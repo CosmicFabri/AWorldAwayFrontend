@@ -2,7 +2,7 @@
   <TrainHeader />
 
   <!-- Sample data and graphs -->
-  <div class="flex flex-row justify-between w-full px-16 py-4">
+  <div class="flex flex-row justify-between w-full px-16 py-4 border-b-2 border-gray-300  ">
     <!-- Sample dataset data (10 rows) -->
     <DataTable
       size="small"

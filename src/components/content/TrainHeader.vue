@@ -3,9 +3,7 @@
     <!-- Train -->
     <div class="flex flex-col gap-y-2">
       <h1 class="text-2xl font-semibold">Train</h1>
-      <Button class="custom-blue-button" rounded>
-        <i class="pi pi-play py-2" style="font-size: 1.2rem; font-weight: bold" />
-      </Button>
+      <ExecuteButton />
     </div>
 
     <div class="flex flex-row gap-x-8">
@@ -28,24 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import { Button, FloatLabel, Select } from 'primevue'
+import { FloatLabel, Select } from 'primevue'
 import { ref } from 'vue';
 import GBTParameters from './GBTParameters.vue'
+import ExecuteButton from './ExecuteButton.vue';
 
 const datasets = ref(['KOI', 'TESS'])
 const algorithms = ref(['Backpropagation', 'Algorithm'])
 </script>
 
 <style scoped>
-.custom-blue-button {
-  /* electrical-blue, in the color palette */
-  background-color: #0042a6;
-  border-color: #0042a6;
-}
-
-.custom-blue-button:hover {
-  /* electrical-blue, in the color palette */
-  background-color: #2867c7 !important;
-  border-color: #2867c7 !important;
-}
 </style>
