@@ -2,7 +2,14 @@
   <TrainHeader />
   <div class="flex flex-col w-2/3 h-1/4 px-32 py-4">
     <!-- Table and graphs -->
-    <DataTable size="small" :value="KOI" scrollable scroll-height="40vh" show-gridlines striped-rows>
+    <DataTable
+      size="small"
+      :value="KOI"
+      scrollable
+      scroll-height="40vh"
+      show-gridlines
+      striped-rows
+    >
       <Column field="KepID" header="KepID" />
       <Column field="KOI_Name" header="KOI Name" />
       <Column field="Kepler_Name" header="Kepler Name" />
