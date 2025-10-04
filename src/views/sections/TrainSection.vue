@@ -1,7 +1,7 @@
 <template>
   <TrainHeader />
 
-	<div class="flex flex-col px-16 ">
+	<div class="flex flex-col px-16 border-b-2 border-gray-300">
 		<!-- Sample data and graphs -->
 		<div class="flex flex-row gap-x-8 justify-between w-full py-4">
 			<!-- Sample dataset data (10 rows) -->
