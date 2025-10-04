@@ -4,6 +4,6 @@
 </template>
 
 <script setup lang="ts">
-import PredictView from './PredictView.vue'
-import TrainView from './TrainView.vue'
+import PredictView from './sections/PredictSection.vue'
+import TrainView from './sections/TrainSection.vue'
 </script>
