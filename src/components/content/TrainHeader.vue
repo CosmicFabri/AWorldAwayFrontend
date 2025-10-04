@@ -22,20 +22,7 @@
 			</FloatLabel>
 
 			<!-- Hyperparameters -->
-			<FloatLabel>
-				<Select class="w-48" input-id="learning-rate" :options="[0.1, 0.001]" :default-value="0.1" />
-				<label for="learning-rate">Learning rate</label>
-			</FloatLabel>
-			
-			<FloatLabel>
-				<Select class="w-48" input-id="batch-size" :options="['1', 'Full Batch', 'Mini-Batch']" default-value="1" />
-				<label for="batch-size">Batch size</label>
-			</FloatLabel>
-
-			<FloatLabel>
-				<Select class="w-48" input-id="epochs" :options="[100, 1000, 10000]" :default-value="100" />
-				<label for="epochs">Number of epochs</label>
-			</FloatLabel>
+			<GBTParameters />
     </div>
   </div>
 </template>
@@ -43,6 +30,7 @@
 <script setup lang="ts">
 import { Button, FloatLabel, Select } from 'primevue'
 import { ref } from 'vue';
+import GBTParameters from './GBTParameters.vue'
 
 const datasets = ref(['KOI', 'TESS'])
 const algorithms = ref(['Backpropagation', 'Algorithm'])
