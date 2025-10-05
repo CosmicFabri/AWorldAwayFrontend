@@ -24,12 +24,25 @@
       </DataTable>
 
       <!-- Graphs section -->
-      <div class="flex flex-col h-full gap-y-8 justify-between items-center">
+      <div class="flex flex-col h-full gap-y-4 justify-between items-center">
         <FloatLabel variant="on">
-          <Select class="w-48" input-id="graphs" :options="graphs" :default-value="graphs[0]" />
+          <Select
+            class="w-48"
+            input-id="graphs"
+            v-model="selectedGraph"
+            :options="graphs"
+            option-label="label"
+            option-value="value"
+          />
           <label for="graphs">Graph</label>
         </FloatLabel>
-        <div class="flex w-80 h-80 border-2"></div>
+
+        <!-- Dynamic image -->
+        <img
+          v-if="imageSrc"
+          :src="imageSrc"
+          class="flex w-92 h-90 border-2 shadow-lg/30"
+        />
       </div>
     </div>
 
@@ -38,21 +51,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import TrainHeader from '@/components/content/TrainHeader.vue'
 import { Button, Column, DataTable, FloatLabel, Select } from 'primevue'
 import { exoplanetsApi } from '@/api/axios'
 
-const graphs = ref(['Performance', 'Epochs', 'Graph'])
+// Options for select dropdown
+const graphs = ref([
+  { label: 'Confusion matrix', value: 'confusion' },
+  { label: 'Feature importance', value: 'feature' },
+  { label: 'Metrics bar', value: 'metrics' }
+])
+
+// Selected graph
+const selectedGraph = ref<string>('confusion')
 
 // Dynamic table data
 const tableHeaders = ref<string[]>([])
 const tableRows = ref<any[]>([])
 
+// Base64 images from backend
+const graphImages = ref<Record<string, string>>({})
+
+// Displayed image
+const imageSrc = ref<string>('')
+
 onMounted(async () => {
   try {
     const res = await exoplanetsApi.get('init')
     const data = await res.data
+
+    // Store base64 images
+    graphImages.value = {
+      confusion: `data:image/png;base64,${data.graphics.confussion_matrix}`,
+      feature: `data:image/png;base64,${data.graphics.feature_importance}`,
+      metrics: `data:image/png;base64,${data.graphics.metrics_bar}`
+    }
+
+    // Default image
+    imageSrc.value = graphImages.value.confusion as string
 
     // Set headers from backend
     tableHeaders.value = data.headerTest
@@ -68,5 +105,10 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching KOI data:', error)
   }
+})
+
+// Watcher to update image when select changes
+watch(selectedGraph, (newVal) => {
+  imageSrc.value = graphImages.value[newVal] as string
 })
 </script>
