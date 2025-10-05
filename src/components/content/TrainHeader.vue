@@ -125,33 +125,4 @@ const train = async () => {
     emit('loading', false)
   }
 }
-
-const train = async () => {
-  try {
-    // Notify parent: training started
-    emit('loading', true)
-
-    const payload = {
-      n_estimators: form.value.n_estimators,
-      learning_rate: form.value.learning_rate,
-      max_depth: form.value.max_depth,
-      min_samples_split: form.value.min_samples_split,
-      train_size: 0.7,
-      scaler_type: 'standard',
-    }
-
-    console.log('Payload being sent:', payload)
-    const res = await exoplanetsApi.post('train/gbt/koi', payload, { withCredentials: true })
-
-    console.log('Model trained successfully:', res.data)
-
-    // Notify parent: training done
-    emit('trained', res.data)
-  } catch (err) {
-    console.error('Error training model:', err)
-  } finally {
-    // Training finished (success or error)
-    emit('loading', false)
-  }
-}
 </script>

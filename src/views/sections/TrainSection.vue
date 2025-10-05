@@ -36,12 +36,20 @@
 					<Button @click="exportModel" class="mb-4" label="Export Model" />
 				</div>
 
-        <!-- Dynamic image -->
-        <img
-          v-if="imageSrc"
-          :src="imageSrc"
-          class="flex w-92 h-90 border-2 shadow-lg/30"
-        />
+        <!-- Conditional rendering -->
+        <div class="flex w-120 h-105 border-2 shadow-lg/30 items-center justify-center">
+          <div v-if="loading" class="flex flex-col items-center justify-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+            <p class="mt-4 text-gray-600 font-medium">Training model...</p>
+          </div>
+
+          <img
+            v-else
+            :src="imageSrc"
+            alt="Graph"
+            class="flex w-full h-full object-contain"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +60,6 @@ import { ref, onMounted, watch } from 'vue'
 import TrainHeader from '@/components/content/TrainHeader.vue'
 import { Button, Column, DataTable, FloatLabel, Select } from 'primevue'
 import { exoplanetsApi } from '@/api/axios'
-import { useDatasetStore } from '@/stores/dataset'
 
 const loading = ref(false)
 const graphs = ref([
@@ -66,6 +73,38 @@ const tableHeaders = ref<string[]>([])
 const tableRows = ref<any[]>([])
 const graphImages = ref<Record<string, string>>({})
 const imageSrc = ref<string>('')
+
+const handleTrainingResults = (data: any) => {
+  console.log('Training results received:', data)
+
+  graphImages.value = {
+    confusion: `data:image/png;base64,${data.graphics.confussion_matrix}`,
+    feature: `data:image/png;base64,${data.graphics.feature_importance}`,
+    metrics: `data:image/png;base64,${data.graphics.metrics_bar}`,
+  }
+
+  imageSrc.value = graphImages.value.confusion as string
+
+  if (data.headerTest && data['matriz_values:']) {
+    tableHeaders.value = data.headerTest
+
+    tableRows.value = data['matriz_values:'].map((row: any[]) => {
+      const obj: Record<string, any> = {}
+      data.headerTest.forEach((header: string, i: number) => {
+        obj[header] = row[i]
+      })
+      return obj
+    })
+  }
+}
+
+const handleLoading = (state: boolean) => {
+  loading.value = state
+}
+
+const exportModel = async () => {
+	const data = await exoplanetsApi.get('export', { withCredentials: true })
+}
 
 onMounted(async () => {
   try {
