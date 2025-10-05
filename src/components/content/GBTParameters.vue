@@ -39,19 +39,6 @@
       <label for="max_depth">Max Depth</label>
     </FloatLabel>
 
-    <!-- Subsample -->
-    <FloatLabel variant="on">
-      <Select
-        class="w-28"
-        input-id="subsample"
-        v-model="params.subsample"
-        :options="subsampleOptions"
-        option-label="label"
-        option-value="value"
-      />
-      <label for="subsample">Subsample</label>
-    </FloatLabel>
-
     <!-- Min Samples Split -->
     <FloatLabel variant="on">
       <Select
@@ -78,6 +65,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits(['update:params'])
 
 const params = ref<GBTParams>({
   learning_rate: null,
@@ -89,7 +77,7 @@ const params = ref<GBTParams>({
 
 const fetchParams = async () => {
 	try {
-		const response = await exoplanetsApi.get('init')
+		const response = await exoplanetsApi.get('init', { withCredentials: true })
 		params.value = await response.data.parameters_default
 	} catch (error) {
 		console.log(`An error has ocurred: ${error}`);
@@ -102,6 +90,15 @@ watch(
     fetchParams()
   },
   { immediate: true }
+)
+
+// Emit to parent whenever params change
+watch(
+  params,
+  (newVal) => {
+    emit('update:params', newVal)
+  },
+  { deep: true }
 )
 
 onMounted(async () => {

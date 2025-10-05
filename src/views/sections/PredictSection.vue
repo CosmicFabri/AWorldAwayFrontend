@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center gap-x-8 px-16 py-4 w-full">
+  <div class="flex flex-row items-center gap-x-8 px-16 py-4 w-full my-4">
     <PredictInputData @prediction-done="handlePrediction" @method-changed="onMethodChanged" @data-uploaded="handleDataUploaded" />
     <DataVisualization :data-result="dataResult" :inputMethod="selectedMethod" />
   </div>
