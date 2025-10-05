@@ -1,5 +1,5 @@
 <template>
-  <TrainHeader @trained="handleTrainingResults" />
+  <TrainHeader @trained="handleTrainingResults" @loading="handleLoading" />
 
   <div class="flex flex-col px-16 border-b-2 border-gray-300 pb-10 py-4">
     <div class="flex flex-row justify-between items-center w-full py-4">
@@ -33,8 +33,20 @@
           <label for="graphs">Graph</label>
         </FloatLabel>
 
-        <!-- Dynamic image -->
-        <img v-if="imageSrc" :src="imageSrc" class="flex w-120 h-105 border-2 shadow-lg/30" />
+        <!-- Conditional rendering -->
+        <div class="flex w-120 h-105 border-2 shadow-lg/30 items-center justify-center">
+          <div v-if="loading" class="flex flex-col items-center justify-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+            <p class="mt-4 text-gray-600 font-medium">Training model...</p>
+          </div>
+
+          <img
+            v-else
+            :src="imageSrc"
+            alt="Graph"
+            class="flex w-full h-full object-contain"
+          />
+        </div>
       </div>
     </div>
 
@@ -48,24 +60,17 @@ import TrainHeader from '@/components/content/TrainHeader.vue'
 import { Button, Column, DataTable, FloatLabel, Select } from 'primevue'
 import { exoplanetsApi } from '@/api/axios'
 
-// Options for select dropdown
+const loading = ref(false)
 const graphs = ref([
   { label: 'Confusion matrix', value: 'confusion' },
   { label: 'Feature importance', value: 'feature' },
   { label: 'Metrics bar', value: 'metrics' },
 ])
 
-// Selected graph
-const selectedGraph = ref<string>('confusion')
-
-// Dynamic table data
+const selectedGraph = ref('confusion')
 const tableHeaders = ref<string[]>([])
 const tableRows = ref<any[]>([])
-
-// Base64 images from backend
 const graphImages = ref<Record<string, string>>({})
-
-// Displayed image
 const imageSrc = ref<string>('')
 
 const handleTrainingResults = (data: any) => {
@@ -79,7 +84,6 @@ const handleTrainingResults = (data: any) => {
 
   imageSrc.value = graphImages.value.confusion as string
 
-  // Optionally refresh table data if also returned by POST
   if (data.headerTest && data['matriz_values:']) {
     tableHeaders.value = data.headerTest
 
@@ -93,25 +97,24 @@ const handleTrainingResults = (data: any) => {
   }
 }
 
+const handleLoading = (state: boolean) => {
+  loading.value = state
+}
+
 onMounted(async () => {
   try {
     const res = await exoplanetsApi.get('init')
-    const data = await res.data
+    const data = res.data
 
-    // Store base64 images
     graphImages.value = {
       confusion: `data:image/png;base64,${data.graphics.confussion_matrix}`,
       feature: `data:image/png;base64,${data.graphics.feature_importance}`,
       metrics: `data:image/png;base64,${data.graphics.metrics_bar}`,
     }
 
-    // Default image
     imageSrc.value = graphImages.value.confusion as string
-
-    // Set headers from backend
     tableHeaders.value = data.headerTest
 
-    // Map backend rows into objects {header: value, ...} for DataTable
     tableRows.value = data['matriz_values:'].map((row: any[]) => {
       const obj: Record<string, any> = {}
       data.headerTest.forEach((header: string, i: number) => {
@@ -124,7 +127,6 @@ onMounted(async () => {
   }
 })
 
-// Watcher to update image when select changes
 watch(selectedGraph, (newVal) => {
   imageSrc.value = graphImages.value[newVal] as string
 })

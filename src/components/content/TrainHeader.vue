@@ -61,7 +61,7 @@ import GBTParameters from './GBTParameters.vue'
 import UploadDatasetModal from '../train/UploadDatasetModal.vue'
 import { exoplanetsApi } from '@/api/axios'
 
-const emit = defineEmits(['trained'])
+const emit = defineEmits(['trained', 'loading'])
 
 const form = ref({
   n_estimators: null,
@@ -84,6 +84,9 @@ const handleChange = (event: any) => {
 
 const train = async () => {
   try {
+    // Notify parent: training started
+    emit('loading', true)
+
     const payload = {
       n_estimators: form.value.n_estimators,
       learning_rate: form.value.learning_rate,
@@ -98,11 +101,13 @@ const train = async () => {
 
     console.log('Model trained successfully:', res.data)
 
-		// Emit the base64 images
+    // Notify parent: training done
     emit('trained', res.data)
   } catch (err) {
     console.error('Error training model:', err)
+  } finally {
+    // Training finished (success or error)
+    emit('loading', false)
   }
 }
-
 </script>
