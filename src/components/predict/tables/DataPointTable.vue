@@ -6,86 +6,48 @@
     @cell-edit-complete="onCellEditComplete"
     show-gridlines
     size="small"
-    class="w-full"
+    class="w-[80%]"
   >
-    <Column field="KepID" header="KepID">
+    <Column v-for="col in getTableColumns" :key="col.field" :field="col.field" :header="col.header">
       <template #editor="{ data, field }">
         <InputText v-model="data[field]" class="w-full text-sm" />
-      </template>
-    </Column>
-
-    <Column field="KOI_Name" header="KOI Name">
-      <template #editor="{ data, field }">
-        <InputText v-model="data[field]" class="w-full text-sm" />
-      </template>
-    </Column>
-
-    <Column field="Kepler_Name" header="Kepler Name">
-      <template #editor="{ data, field }">
-        <InputText v-model="data[field]" class="w-full text-sm" />
-      </template>
-    </Column>
-
-    <Column field="Exoplanet_Archive_Disposition" header="Exoplanet Archive Disposition">
-      <template #editor="{ data, field }">
-        <InputText v-model="data[field]" class="w-full text-sm" />
-      </template>
-    </Column>
-
-    <Column field="Orbital_Period_days" header="Orbital Period (days)">
-      <template #editor="{ data, field }">
-        <InputNumber
-          v-model="data[field]"
-          class="w-full"
-          input-class="w-full text-sm"
-          mode="decimal"
-          :minFractionDigits="0"
-          :maxFractionDigits="2"
-        />
-      </template>
-    </Column>
-
-    <Column field="Transit_Epoch_BKJD" header="Transit Epoch (BKJD)">
-      <template #editor="{ data, field }">
-        <InputNumber
-          v-model="data[field]"
-          class="w-full"
-          input-class="w-full text-sm"
-          mode="decimal"
-        />
-      </template>
-    </Column>
-
-    <Column field="Impact_Parameter" header="Impact Parameter">
-      <template #editor="{ data, field }">
-        <InputNumber
-          v-model="data[field]"
-          class="w-full"
-          input-class="w-full text-sm"
-          mode="decimal"
-        />
-      </template>
-    </Column>
-
-    <Column field="Transit_Duration_hrs" header="Transit Duration (hrs)">
-      <template #editor="{ data, field }">
-        <InputNumber
-          v-model="data[field]"
-          class="w-full"
-          input-class="w-full text-sm"
-          mode="decimal"
-        />
       </template>
     </Column>
   </DataTable>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { DataTable, Column } from 'primevue'
-import InputText from 'primevue/inputtext'
-import InputNumber from 'primevue/inputnumber'
+import { computed, ref, watch } from 'vue'
+import { DataTable, Column, InputText } from 'primevue'
 import { KOIDataPoint } from '@/data/KOIDataPoint'
+import { useDatasetStore } from '@/stores/dataset'
+
+const store = useDatasetStore()
+
+const tableHeaders = ref<string[]>([])
+
+const getTableColumns = computed(() =>
+  tableHeaders.value.map((value) => {
+    return {
+      field: value,
+      header: value,
+    }
+  }),
+)
+
+// Watch para reaccionar cuando el dataset esté disponible
+watch(
+  () => store.currentDataset,
+  (newDataset) => {
+    if (newDataset) {
+      tableHeaders.value = store.getHeadersWithoutTarget
+      // console.log(tableHeaders.value)
+
+      console.log('Dataset cargado:', newDataset)
+    }
+  },
+  { immediate: true },
+)
 
 const editingRows = ref([])
 

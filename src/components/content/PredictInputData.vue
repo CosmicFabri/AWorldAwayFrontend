@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center gap-y-4 w-60">
     <div class="flex flex-row justify-center items-center gap-x-5">
       <h1 class="text-2xl font-semibold">Predict</h1>
-      <ExecuteButton />
+      <ExecuteButton :method="selectedMethod?.code" />
     </div>
     <h2 class="text-xl font-semibold text-center">Input data</h2>
     <Select

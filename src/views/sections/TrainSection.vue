@@ -3,7 +3,6 @@
 
   <div class="flex flex-col px-16 border-b-2 border-gray-300">
     <div class="flex flex-row gap-x-8 justify-between w-full py-4">
-      
       <!-- Dynamic DataTable -->
       <DataTable
         size="small"
@@ -15,12 +14,7 @@
         table-style="width: 100%"
         class="w-5/7"
       >
-        <Column
-          v-for="header in tableHeaders"
-          :key="header"
-          :field="header"
-          :header="header"
-        />
+        <Column v-for="header in tableHeaders" :key="header" :field="header" :header="header" />
       </DataTable>
 
       <!-- Graphs section -->
@@ -38,11 +32,7 @@
         </FloatLabel>
 
         <!-- Dynamic image -->
-        <img
-          v-if="imageSrc"
-          :src="imageSrc"
-          class="flex w-92 h-90 border-2 shadow-lg/30"
-        />
+        <img v-if="imageSrc" :src="imageSrc" class="flex w-92 h-90 border-2 shadow-lg/30" />
       </div>
     </div>
 
@@ -55,12 +45,13 @@ import { ref, onMounted, watch } from 'vue'
 import TrainHeader from '@/components/content/TrainHeader.vue'
 import { Button, Column, DataTable, FloatLabel, Select } from 'primevue'
 import { exoplanetsApi } from '@/api/axios'
+import { useDatasetStore } from '@/stores/dataset'
 
 // Options for select dropdown
 const graphs = ref([
   { label: 'Confusion matrix', value: 'confusion' },
   { label: 'Feature importance', value: 'feature' },
-  { label: 'Metrics bar', value: 'metrics' }
+  { label: 'Metrics bar', value: 'metrics' },
 ])
 
 // Selected graph
@@ -76,6 +67,8 @@ const graphImages = ref<Record<string, string>>({})
 // Displayed image
 const imageSrc = ref<string>('')
 
+const store = useDatasetStore()
+
 onMounted(async () => {
   try {
     const res = await exoplanetsApi.get('init')
@@ -85,7 +78,7 @@ onMounted(async () => {
     graphImages.value = {
       confusion: `data:image/png;base64,${data.graphics.confussion_matrix}`,
       feature: `data:image/png;base64,${data.graphics.feature_importance}`,
-      metrics: `data:image/png;base64,${data.graphics.metrics_bar}`
+      metrics: `data:image/png;base64,${data.graphics.metrics_bar}`,
     }
 
     // Default image

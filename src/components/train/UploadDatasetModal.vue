@@ -31,20 +31,37 @@
           </FloatLabel>
         </div>
 
-        <Button v-if="canShowUploadButton" severity="info">Upload</Button>
+        <Button @click="handleUpload" v-if="canShowUploadButton" severity="info">Upload</Button>
       </div>
     </Dialog>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useDatasetStore } from '@/stores/dataset'
 import { Dialog, FileUpload, Select, FloatLabel, Button } from 'primevue'
 import { ref, computed } from 'vue'
+
+const store = useDatasetStore()
+
+/* 
+Store the CSV file, and the dataset info
+*/
+const handleUpload = () => {
+  store.setCurrentDataset({
+    headers: columns.value,
+    name: 'custom',
+    targetColumn: selectedColumn.value?.name,
+  })
+
+  console.log(store.currentDataset)
+  closeModal(false)
+}
 
 const parsingFinished = ref(false)
 const fileupload = ref()
 
-const selectedColumn = ref(null)
+const selectedColumn = ref<{ name: string; code: string } | null>(null)
 const columnsToSelect = computed(() =>
   columns.value.map((value) => {
     return {
