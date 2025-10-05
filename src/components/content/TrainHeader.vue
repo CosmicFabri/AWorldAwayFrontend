@@ -61,6 +61,8 @@ import GBTParameters from './GBTParameters.vue'
 import UploadDatasetModal from '../train/UploadDatasetModal.vue'
 import { exoplanetsApi } from '@/api/axios'
 
+const emit = defineEmits(['trained'])
+
 const form = ref({
   n_estimators: null,
   learning_rate: null,
@@ -88,15 +90,19 @@ const train = async () => {
       max_depth: form.value.max_depth,
       min_samples_split: form.value.min_samples_split,
       train_size: 0.7,
-      scaler_type: "standard"
+      scaler_type: 'standard',
     }
 
     console.log('Payload being sent:', payload)
-
     const res = await exoplanetsApi.post('train/gbt/koi', payload)
+
     console.log('Model trained successfully:', res.data)
+
+		// Emit the base64 images
+    emit('trained', res.data)
   } catch (err) {
     console.error('Error training model:', err)
   }
 }
+
 </script>

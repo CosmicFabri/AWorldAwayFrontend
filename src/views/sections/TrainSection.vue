@@ -1,5 +1,5 @@
 <template>
-  <TrainHeader />
+  <TrainHeader @trained="handleTrainingResults" />
 
   <div class="flex flex-col px-16 border-b-2 border-gray-300 pb-10 py-4">
     <div class="flex flex-row justify-between items-center w-full py-4">
@@ -67,6 +67,31 @@ const graphImages = ref<Record<string, string>>({})
 
 // Displayed image
 const imageSrc = ref<string>('')
+
+const handleTrainingResults = (data: any) => {
+  console.log('Training results received:', data)
+
+  graphImages.value = {
+    confusion: `data:image/png;base64,${data.graphics.confussion_matrix}`,
+    feature: `data:image/png;base64,${data.graphics.feature_importance}`,
+    metrics: `data:image/png;base64,${data.graphics.metrics_bar}`,
+  }
+
+  imageSrc.value = graphImages.value.confusion as string
+
+  // Optionally refresh table data if also returned by POST
+  if (data.headerTest && data['matriz_values:']) {
+    tableHeaders.value = data.headerTest
+
+    tableRows.value = data['matriz_values:'].map((row: any[]) => {
+      const obj: Record<string, any> = {}
+      data.headerTest.forEach((header: string, i: number) => {
+        obj[header] = row[i]
+      })
+      return obj
+    })
+  }
+}
 
 onMounted(async () => {
   try {
