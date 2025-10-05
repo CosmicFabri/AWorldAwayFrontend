@@ -43,7 +43,7 @@ watch(
       tableHeaders.value = store.getHeadersWithoutTarget
       // console.log(tableHeaders.value)
 
-      console.log('Dataset cargado:', newDataset)
+      // console.log('Dataset cargado:', newDataset)
     }
   },
   { immediate: true },

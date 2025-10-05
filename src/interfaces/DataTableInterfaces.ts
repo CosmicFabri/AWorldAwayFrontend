@@ -11,5 +11,3 @@ export interface DataResult {
   columns: ColumnDef[]
   data: TableRow[]
 }
-
-

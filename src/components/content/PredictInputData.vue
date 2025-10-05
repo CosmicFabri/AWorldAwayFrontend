@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center gap-y-4 w-60">
     <div class="flex flex-row justify-center items-center gap-x-5">
       <h1 class="text-2xl font-semibold">Predict</h1>
-      <ExecuteButton :method="selectedMethod?.code" />
+      <ExecuteButton @prediction-done="handlePredictionDone" :method="selectedMethod?.code" />
     </div>
     <h2 class="text-xl font-semibold text-center">Input data</h2>
     <Select
@@ -21,7 +21,6 @@
       ref="fileupload"
       mode="basic"
       name="demo"
-      url="/api/upload"
       accept=".csv"
       auto
     />
@@ -33,7 +32,14 @@ import { FileUpload, Select } from 'primevue'
 import type { TableRow, ColumnDef, DataResult } from '@/interfaces/DataTableInterfaces'
 import ExecuteButton from './ExecuteButton.vue'
 import { computed, ref } from 'vue'
+import { useDatasetStore } from '@/stores/dataset'
+import type { ClassificationResultResponse } from '@/interfaces/ClassificationResult.interface'
 
+const handlePredictionDone = (value: ClassificationResultResponse) => {
+  emit('predictionDone', value)
+}
+
+const store = useDatasetStore()
 const fileupload = ref()
 
 const parseCsv = (csvString: string): DataResult => {
@@ -62,6 +68,7 @@ const onFileSelect = async (event: any) => {
   console.log('Loading data')
 
   const file = event.files[0]
+  console.log(file)
   const text = await file.text()
 
   const { columns, data } = parseCsv(text)
@@ -74,11 +81,15 @@ const onFileSelect = async (event: any) => {
   console.log('Data loaded')
 
   emit('data-uploaded', result)
+
+  // Save file in the store
+  store.trainingDatasetCSV = file
 }
 
 const emit = defineEmits<{
   (e: 'method-changed', value: string): void
   (e: 'data-uploaded', value: DataResult): void
+  (e: 'predictionDone', value: ClassificationResultResponse): void
 }>()
 
 const selectedMethod = ref<{ name: string; code: string } | null>(null)

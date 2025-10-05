@@ -9,11 +9,7 @@ interface Dataset {
 
 export const useDatasetStore = defineStore('dataset', () => {
   const currentDataset = ref<Dataset>()
-  const currentSinglePointData = ref<any[]>([])
-
-  const setCurrentSinglePointData = (newData: any[]) => {
-    currentSinglePointData.value = newData
-  }
+  const trainingDatasetCSV = ref<File>()
 
   const setCurrentDataset = (newDataset: Dataset) => {
     currentDataset.value = newDataset
@@ -34,7 +30,6 @@ export const useDatasetStore = defineStore('dataset', () => {
     currentDataset,
     setCurrentDataset,
     getHeadersWithoutTarget,
-    currentSinglePointData,
-    setCurrentSinglePointData,
+    trainingDatasetCSV,
   }
 })
