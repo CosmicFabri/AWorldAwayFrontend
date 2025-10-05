@@ -1,27 +1,23 @@
 <template>
   <TrainHeader />
 
-  <div class="flex flex-col px-16 border-b-2 border-gray-300">
-    <div class="flex flex-row gap-x-8 justify-between w-full py-4">
-      
+  <div class="flex flex-col px-16 border-b-2 border-gray-300 pb-10 py-4">
+    <div class="flex flex-row justify-between items-center w-full py-4">
       <!-- Dynamic DataTable -->
-      <DataTable
-        size="small"
-        :value="tableRows"
-        scrollable
-        scroll-height="60vh"
-        show-gridlines
-        striped-rows
-        table-style="width: 100%"
-        class="w-5/7"
-      >
-        <Column
-          v-for="header in tableHeaders"
-          :key="header"
-          :field="header"
-          :header="header"
-        />
-      </DataTable>
+      <div class="flex flex-col w-5/8 gap-y-4">
+        <h1 class="text-lg font-semibold">Sample data (10 rows of the dataset)</h1>
+        <DataTable
+          size="small"
+          :value="tableRows"
+          scrollable
+          scroll-height="60vh"
+          show-gridlines
+          striped-rows
+          table-style="width: 100%"
+        >
+          <Column v-for="header in tableHeaders" :key="header" :field="header" :header="header" />
+        </DataTable>
+      </div>
 
       <!-- Graphs section -->
       <div class="flex flex-col h-full gap-y-4 justify-between items-center">
@@ -38,11 +34,7 @@
         </FloatLabel>
 
         <!-- Dynamic image -->
-        <img
-          v-if="imageSrc"
-          :src="imageSrc"
-          class="flex w-92 h-90 border-2 shadow-lg/30"
-        />
+        <img v-if="imageSrc" :src="imageSrc" class="flex w-120 h-105 border-2 shadow-lg/30" />
       </div>
     </div>
 
@@ -60,7 +52,7 @@ import { exoplanetsApi } from '@/api/axios'
 const graphs = ref([
   { label: 'Confusion matrix', value: 'confusion' },
   { label: 'Feature importance', value: 'feature' },
-  { label: 'Metrics bar', value: 'metrics' }
+  { label: 'Metrics bar', value: 'metrics' },
 ])
 
 // Selected graph
@@ -85,7 +77,7 @@ onMounted(async () => {
     graphImages.value = {
       confusion: `data:image/png;base64,${data.graphics.confussion_matrix}`,
       feature: `data:image/png;base64,${data.graphics.feature_importance}`,
-      metrics: `data:image/png;base64,${data.graphics.metrics_bar}`
+      metrics: `data:image/png;base64,${data.graphics.metrics_bar}`,
     }
 
     // Default image
