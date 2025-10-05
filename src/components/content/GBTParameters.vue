@@ -77,7 +77,7 @@ const params = ref<GBTParams>({
 
 const fetchParams = async () => {
 	try {
-		const response = await exoplanetsApi.get('init')
+		const response = await exoplanetsApi.get('init', { withCredentials: true })
 		params.value = await response.data.parameters_default
 	} catch (error) {
 		console.log(`An error has ocurred: ${error}`);

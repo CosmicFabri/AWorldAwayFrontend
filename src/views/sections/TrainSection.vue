@@ -33,7 +33,7 @@
 						/>
 						<label for="graphs">Graph</label>
 					</FloatLabel>
-					<Button class="mb-4" label="Export Model" />
+					<Button @click="exportModel" class="mb-4" label="Export Model" />
 				</div>
 
         <!-- Conditional rendering -->
@@ -100,6 +100,10 @@ const handleTrainingResults = (data: any) => {
 
 const handleLoading = (state: boolean) => {
   loading.value = state
+}
+
+const exportModel = async () => {
+	const data = await exoplanetsApi.get('export', { withCredentials: true })
 }
 
 onMounted(async () => {

@@ -97,7 +97,7 @@ const train = async () => {
     }
 
     console.log('Payload being sent:', payload)
-    const res = await exoplanetsApi.post('train/gbt/koi', payload)
+    const res = await exoplanetsApi.post('train/gbt/koi', payload, { withCredentials: true })
 
     console.log('Model trained successfully:', res.data)
 
