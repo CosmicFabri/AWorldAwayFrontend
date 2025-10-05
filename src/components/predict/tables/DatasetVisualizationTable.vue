@@ -11,7 +11,7 @@
       table-style="width: 100%"
       :value="dataResult.data"
       paginator
-      :rows="5"
+      :rows="10"
       :rowsPerPageOptions="[5, 10, 20, 50]"
     >
       <Column

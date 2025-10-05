@@ -60,6 +60,7 @@ import { ref } from 'vue'
 import GBTParameters from './GBTParameters.vue'
 import UploadDatasetModal from '../train/UploadDatasetModal.vue'
 import { exoplanetsApi } from '@/api/axios'
+import { useDatasetStore } from '@/stores/dataset'
 
 const emit = defineEmits(['trained', 'loading'])
 
@@ -76,9 +77,23 @@ const algorithms = ref(['Gradient Boosting Tree'])
 const isModalVisible = ref(false)
 const defaultParams = ref(false)
 
-const handleChange = (event: any) => {
+const handleChange = async (event: any) => {
   if (event.value === 'Upload my data') {
     isModalVisible.value = true
+  } else if (event.value === 'KOI') {
+    try {
+      const res = await exoplanetsApi.get('init')
+      const data = await res.data
+      const store = useDatasetStore()
+
+      store.setCurrentDataset({
+        headers: data.headerTest,
+        name: 'Koi',
+        targetColumn: 'koi_disposition',
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
