@@ -4,7 +4,7 @@
   <div class="flex flex-col px-16 border-b-2 border-gray-300 pb-10 py-4">
     <div class="flex flex-row justify-between items-center w-full py-4">
       <!-- Dynamic DataTable -->
-      <div class="flex flex-col w-5/8 gap-y-4">
+      <div class="flex flex-col w-5/8 gap-y-12">
         <h1 class="text-lg font-semibold">Sample data (10 rows of the dataset)</h1>
         <DataTable
           size="small"
@@ -21,17 +21,20 @@
 
       <!-- Graphs section -->
       <div class="flex flex-col h-full gap-y-4 justify-between items-center">
-        <FloatLabel variant="on">
-          <Select
-            class="w-48"
-            input-id="graphs"
-            v-model="selectedGraph"
-            :options="graphs"
-            option-label="label"
-            option-value="value"
-          />
-          <label for="graphs">Graph</label>
-        </FloatLabel>
+				<div class="flex flex-row gap-x-12 justify-betweeen">
+					<FloatLabel variant="on">
+						<Select
+							class="w-48"
+							input-id="graphs"
+							v-model="selectedGraph"
+							:options="graphs"
+							option-label="label"
+							option-value="value"
+						/>
+						<label for="graphs">Graph</label>
+					</FloatLabel>
+					<Button class="mb-4" label="Export Model" />
+				</div>
 
         <!-- Conditional rendering -->
         <div class="flex w-120 h-105 border-2 shadow-lg/30 items-center justify-center">
@@ -49,8 +52,6 @@
         </div>
       </div>
     </div>
-
-    <Button class="mb-4" label="Export Model" />
   </div>
 </template>
 
