@@ -6,12 +6,12 @@
       <ExecuteButton />
     </div>
 
-    <div class="flex flex-row gap-x-8">
+    <div class="flex flex-row gap-x-6">
       <!-- Dataset Select -->
 
       <FloatLabel>
         <Select
-          class="w-48"
+          class="w-36"
           input-id="datasets"
           :options="datasets"
           :default-value="datasets[0]"
@@ -23,10 +23,11 @@
       <!-- Algorithm Select -->
       <FloatLabel>
         <Select
-          class="w-48"
+          class="w-60"
           input-id="algorithms"
           :options="algorithms"
           :default-value="algorithms[0]"
+					disabled
         />
         <label for="algorithms">Algorithm</label>
       </FloatLabel>
@@ -47,7 +48,7 @@ import ExecuteButton from './ExecuteButton.vue'
 import UploadDatasetModal from '../train/UploadDatasetModal.vue'
 
 const datasets = ref(['KOI', 'Upload my data'])
-const algorithms = ref(['Backpropagation', 'Algorithm'])
+const algorithms = ref(['Gradient Boosting Tree'])
 
 const isModalVisible = ref(false)
 
