@@ -8,32 +8,54 @@
 
     <div class="flex flex-row gap-x-8">
       <!-- Dataset Select -->
-			<FloatLabel>
-				<Select class="w-48" input-id="datasets" :options="datasets" :default-value="datasets[0]" />
-				<label for="datasets">Dataset</label>
-			</FloatLabel>
 
-			<!-- Algorithm Select -->
-			<FloatLabel>
-				<Select class="w-48" input-id="algorithms" :options="algorithms" :default-value="algorithms[0]" />
-				<label for="algorithms">Algorithm</label>
-			</FloatLabel>
+      <FloatLabel>
+        <Select
+          class="w-48"
+          input-id="datasets"
+          :options="datasets"
+          :default-value="datasets[0]"
+          @change="handleChange"
+        />
+        <label for="datasets">Dataset</label>
+      </FloatLabel>
 
-			<!-- Hyperparameters -->
-			<GBTParameters />
+      <!-- Algorithm Select -->
+      <FloatLabel>
+        <Select
+          class="w-48"
+          input-id="algorithms"
+          :options="algorithms"
+          :default-value="algorithms[0]"
+        />
+        <label for="algorithms">Algorithm</label>
+      </FloatLabel>
+
+      <!-- Hyperparameters -->
+      <GBTParameters />
+
+      <UploadDatasetModal v-model:isVisible="isModalVisible" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { FloatLabel, Select } from 'primevue'
-import { ref } from 'vue';
+import { ref } from 'vue'
 import GBTParameters from './GBTParameters.vue'
-import ExecuteButton from './ExecuteButton.vue';
+import ExecuteButton from './ExecuteButton.vue'
+import UploadDatasetModal from '../train/UploadDatasetModal.vue'
 
-const datasets = ref(['KOI', 'TESS'])
+const datasets = ref(['KOI', 'Upload my data'])
 const algorithms = ref(['Backpropagation', 'Algorithm'])
+
+const isModalVisible = ref(false)
+
+const handleChange = (event: any) => {
+  if (event.value === 'Upload my data') {
+    isModalVisible.value = true
+  }
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
