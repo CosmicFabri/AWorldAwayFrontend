@@ -99,9 +99,7 @@ const fetchParams = async () => {
 watch(
   () => props.default,
   (newVal) => {
-    if (newVal === true) {
-      fetchParams()
-    }
+    fetchParams()
   },
   { immediate: true }
 )
