@@ -30,6 +30,8 @@ import { FileUpload, Select } from 'primevue'
 import ExecuteButton from './ExecuteButton.vue'
 import { computed, ref } from 'vue'
 
+const fileupload = ref()
+
 const emit = defineEmits<{
   (e: 'method-changed', value: string): void
 }>()
