@@ -147,10 +147,11 @@ onMounted(async () => {
       feature: `data:image/png;base64,${data.graphics.feature_importance}`,
       metrics: `data:image/png;base64,${data.graphics.metrics_bar}`,
     }
-
+		
     imageSrc.value = graphImages.value.confusion as string
     tableHeaders.value = data.headerTest
-
+		
+		
     tableRows.value = data['matriz_values:'].map((row: any[]) => {
       const obj: Record<string, any> = {}
       data.headerTest.forEach((header: string, i: number) => {
