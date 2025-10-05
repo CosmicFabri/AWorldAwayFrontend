@@ -21,34 +21,31 @@
 
       <!-- Graphs section -->
       <div class="flex flex-col h-full gap-y-4 justify-between items-center">
-				<div class="flex flex-row gap-x-12 justify-betweeen">
-					<FloatLabel variant="on">
-						<Select
-							class="w-48"
-							input-id="graphs"
-							v-model="selectedGraph"
-							:options="graphs"
-							option-label="label"
-							option-value="value"
-						/>
-						<label for="graphs">Graph</label>
-					</FloatLabel>
-					<Button @click="exportModel" class="mb-4" label="Export Model" />
-				</div>
+        <div class="flex flex-row gap-x-12 justify-betweeen">
+          <FloatLabel variant="on">
+            <Select
+              class="w-48"
+              input-id="graphs"
+              v-model="selectedGraph"
+              :options="graphs"
+              option-label="label"
+              option-value="value"
+            />
+            <label for="graphs">Graph</label>
+          </FloatLabel>
+          <Button @click="exportModel" class="mb-4" label="Export Model" />
+        </div>
 
         <!-- Conditional rendering -->
         <div class="flex w-120 h-105 border-2 shadow-lg/30 items-center justify-center">
           <div v-if="loading" class="flex flex-col items-center justify-center">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+            <div
+              class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"
+            ></div>
             <p class="mt-4 text-gray-600 font-medium">Training model...</p>
           </div>
 
-          <img
-            v-else
-            :src="imageSrc"
-            alt="Graph"
-            class="flex w-full h-full object-contain"
-          />
+          <img v-else :src="imageSrc" alt="Graph" class="flex w-full h-full object-contain" />
         </div>
       </div>
     </div>
@@ -103,7 +100,41 @@ const handleLoading = (state: boolean) => {
 }
 
 const exportModel = async () => {
-	const data = await exoplanetsApi.get('export', { withCredentials: true })
+  try {
+    const response = await exoplanetsApi.get('export', {
+      responseType: 'blob',
+    })
+
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'] || 'application/octet-stream',
+    })
+
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    const contentDisposition = response.headers['content-disposition']
+    console.log(contentDisposition)
+
+    let filename = 'model.pkl'
+
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i)
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1]
+      }
+    }
+
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+
+    // Clean
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 onMounted(async () => {
