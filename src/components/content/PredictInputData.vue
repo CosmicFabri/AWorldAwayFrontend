@@ -21,8 +21,6 @@
       url="/api/upload"
       accept=".csv"
     />
-    <!-- <Button label="Upload file" severity="info" /> -->
-    <!-- <Button label="Enter data" severity="info" /> -->
   </div>
 </template>
 
@@ -31,8 +29,8 @@ import { FileUpload, Select } from 'primevue'
 import ExecuteButton from './ExecuteButton.vue'
 import { computed, ref } from 'vue'
 
+const fileupload = ref()
 const selectedMethod = ref()
-// const selectedMethodName = computed(() => selectedMethod.name)
 
 const showFileUpload = computed(() => {
   return selectedMethod.value?.name === 'Upload file'
