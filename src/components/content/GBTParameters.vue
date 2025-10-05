@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row gap-x-8">
     <!-- Estimators -->
-    <FloatLabel>
+    <FloatLabel variant="on">
       <Select
         class="w-28"
         input-id="n_estimators"
@@ -14,7 +14,7 @@
     </FloatLabel>
 
     <!-- Learning Rate -->
-    <FloatLabel>
+    <FloatLabel variant="on">
       <Select
         class="w-28"
         input-id="learning_rate"
@@ -27,7 +27,7 @@
     </FloatLabel>
 
     <!-- Max Depth -->
-    <FloatLabel>
+    <FloatLabel variant="on">
       <Select
         class="w-28"
         input-id="max_depth"
@@ -40,7 +40,7 @@
     </FloatLabel>
 
     <!-- Subsample -->
-    <FloatLabel>
+    <FloatLabel variant="on">
       <Select
         class="w-28"
         input-id="subsample"
@@ -53,7 +53,7 @@
     </FloatLabel>
 
     <!-- Min Samples Split -->
-    <FloatLabel>
+    <FloatLabel variant="on">
       <Select
         class="w-28"
         input-id="min_samples_split"
@@ -68,20 +68,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { FloatLabel, Select } from 'primevue'
 import type { GBTParams } from '@/data/interfaces/GBTParams'
+import { exoplanetsApi } from '@/api/axios'
 
-// This would be fetched from the backend
-const backendResponse = {
-  parameters_default: {
-    learning_rate: 0.1,
-    max_depth: 3,
-    min_samples_split: 2,
-    n_estimators: 100,
-    subsample: 1
-  }
+interface Props {
+	default: boolean
 }
+
+const props = defineProps<Props>()
 
 const params = ref<GBTParams>({
   learning_rate: null,
@@ -91,9 +87,27 @@ const params = ref<GBTParams>({
   subsample: null
 })
 
-onMounted(() => {
-  // Set defaults from backend
-  params.value = { ...backendResponse.parameters_default }
+const fetchParams = async () => {
+	try {
+		const response = await exoplanetsApi.get('init')
+		params.value = await response.data.parameters_default
+	} catch (error) {
+		console.log(`An error has ocurred: ${error}`);
+	}
+}
+
+watch(
+  () => props.default,
+  (newVal) => {
+    if (newVal) {
+      fetchParams()
+    }
+  },
+  { immediate: true }
+)
+
+onMounted(async () => {
+	await fetchParams()
 })
 
 // Options for dropdowns (include the backend default)
